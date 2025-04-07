@@ -5,7 +5,7 @@ export function deepEquals<T>(objA: T, objB: T): boolean {
   //    - 배열인지 확인
   //    - 객체의 키 개수가 다른 경우 처리
   //    - 재귀적으로 각 속성에 대해 deepEquals 호출
-  if ( objA === objB ) {
+  if (objA === objB) {
     return true;
   }
   if (
@@ -19,11 +19,11 @@ export function deepEquals<T>(objA: T, objB: T): boolean {
   if (Object.keys(objA).length !== Object.keys(objB).length) {
     return false;
   }
-  for ( const key of Object.keys(objA) ) {
-    if ( !Object.prototype.hasOwnProperty.call(objB, key) ) {
+  for (const key of Object.keys(objA)) {
+    if (!Object.prototype.hasOwnProperty.call(objB, key)) {
       return false;
     }
-    if ( !deepEquals(objA[key as keyof T], objB[key as keyof T]) ) {
+    if (!deepEquals(objA[key as keyof T], objB[key as keyof T])) {
       return false;
     }
   }

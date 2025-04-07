@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { shallowEquals } from "../equalities";
 import { ComponentType, createElement } from "react";
 
@@ -12,10 +11,10 @@ export function memo<P extends object>(
   // 3. equals 함수를 사용하여 props 비교
   // 4. props가 변경된 경우에만 새로운 렌더링 수행
   // let prevProps : P | null = null;
-  let prevProps : P | null = null;
-  let prevRender : React.ReactNode | null = null;
+  let prevProps: P | null = null;
+  let prevRender: React.ReactNode | null = null;
   return function memoizedComponent(props: P) {
-    if ( prevProps && _equals(prevProps, props) ) {
+    if (prevProps && _equals(prevProps, props)) {
       return prevRender;
     }
 
