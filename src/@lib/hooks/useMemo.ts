@@ -15,15 +15,13 @@ export function useMemo<T>(
   // 3. 의존성이 변경된 경우 factory 함수 실행 및 결과 저장
   // 4. 메모이제이션된 값 반환
   const ref = useRef<{deps: DependencyList; value: T} | null>(null);
-  console.log(!ref.current, ref.current?.deps !== _deps, ref.current?.deps,  _deps);
-  if ( !ref.current || ref.current?.deps !== _deps ) {
+  if ( !ref.current || !_equals(ref.current.deps, _deps) ) {
     const newValue = factory();
     ref.current = {
       deps: _deps,
       value: newValue
     }
   }
-
 
   return ref.current.value;
 }
