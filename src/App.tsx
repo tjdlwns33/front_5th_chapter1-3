@@ -55,7 +55,9 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className={`p-4 ${theme === 'light' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-200'}`}>
+    <header
+      className={`p-4 ${theme === "light" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200"}`}
+    >
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold">샘플 애플리케이션</h1>
         <div className="flex items-center">
@@ -289,14 +291,17 @@ const App: React.FC = () => {
     addNotification("로그아웃되었습니다", "info");
   }, []);
 
-  const addNotification = useCallback((message: string, type: Notification["type"]) => {
-    const newNotification: Notification = {
-      id: Date.now(),
-      message,
-      type,
-    };
-    setNotifications((prev) => [...prev, newNotification]);
-  }, []);
+  const addNotification = useCallback(
+    (message: string, type: Notification["type"]) => {
+      const newNotification: Notification = {
+        id: Date.now(),
+        message,
+        type,
+      };
+      setNotifications((prev) => [...prev, newNotification]);
+    },
+    [],
+  );
 
   const removeNotification = useCallback((id: number) => {
     setNotifications((prev) =>
