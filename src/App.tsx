@@ -1,6 +1,12 @@
-import React, { useState, createContext, useContext, useCallback } from "react";
+import React, {
+  useState,
+  createContext,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { generateItems, renderLog } from "./utils";
-import { useTheme } from "./ThemeProvider";
+import { Theme, ThemeProvider, useTheme } from "./ThemeProvider";
 
 // 타입 정의
 interface Item {
@@ -270,7 +276,17 @@ export const NotificationSystem: React.FC = () => {
 
 // 메인 App 컴포넌트
 const App: React.FC = () => {
-  const {theme} = useTheme();
+  const [theme, setTheme] = useState<Theme>("light");
+  const toggleTheme = useCallback(() => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  }, []);
+  const themeValue = useMemo(
+    () => ({ theme, toggleTheme }),
+    [theme, toggleTheme],
+  );
+
+  // const { theme } = useTheme();
+  // console.log(theme)
   const [items, setItems] = useState(generateItems(1000));
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -318,26 +334,28 @@ const App: React.FC = () => {
     addNotification,
     removeNotification,
   };
-  
+
   return (
-    <AppContext.Provider value={contextValue}>
-      <div
-        className={`min-h-screen ${theme === "light" ? "" : "bg-gray-900 text-white"}`}
-      >
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 md:pr-4">
-              <ItemList items={items} onAddItemsClick={addItems} />
-            </div>
-            <div className="w-full md:w-1/2 md:pl-4">
-              <ComplexForm />
+    <ThemeProvider value={themeValue}>
+      <AppContext.Provider value={contextValue}>
+        <div
+          className={`min-h-screen ${theme === "light" ? "" : "bg-gray-900 text-white"}`}
+        >
+          <Header />
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 md:pr-4">
+                <ItemList items={items} onAddItemsClick={addItems} />
+              </div>
+              <div className="w-full md:w-1/2 md:pl-4">
+                <ComplexForm />
+              </div>
             </div>
           </div>
+          <NotificationSystem />
         </div>
-        <NotificationSystem />
-      </div>
-    </AppContext.Provider>
+      </AppContext.Provider>
+    </ThemeProvider>
   );
 };
 
