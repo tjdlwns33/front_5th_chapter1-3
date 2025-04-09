@@ -1,13 +1,8 @@
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-} from "react";
+import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
 
-export type Theme = "light" | "dark";
+type Theme = "light" | "dark";
 
-export interface ContextType {
+interface ContextType {
   theme: Theme;
   toggleTheme: () => void;
 }
@@ -15,14 +10,12 @@ export interface ContextType {
 const ThemeContext = createContext<ContextType | null>(null);
 
 // Provider 컴포넌트
-export const ThemeProvider: FC<
-  PropsWithChildren<{ value: { theme: Theme; toggleTheme: () => void } }>
-> = ({ children, value }) => {
-  // const [theme, setTheme] = useState<Theme>("light");
-  // const toggleTheme = useCallback(() => {
-  //   setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  // }, []);
-  // const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
+export const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [theme, setTheme] = useState<Theme>("light");
+  const toggleTheme = useCallback(() => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  }, []);
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
