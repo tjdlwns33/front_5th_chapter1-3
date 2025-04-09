@@ -1,5 +1,6 @@
-import React, { useState, createContext, useContext, useCallback, PropsWithChildren, useMemo } from "react";
+import React, { useState, createContext, useContext, useCallback } from "react";
 import { generateItems, renderLog } from "./utils";
+import { useTheme } from "./ThemeProvider";
 
 // 타입 정의
 interface Item {
@@ -20,37 +21,6 @@ interface Notification {
   message: string;
   type: "info" | "success" | "warning" | "error";
 }
-
-// Theme 타입 정의
-export type Theme = "light" | "dark";
-
-export interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | null>(null);
-
-// Provider 컴포넌트
-export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>("light");
-  const toggleTheme = useCallback(() => {
-    setTheme(prevTheme => prevTheme === "light" ? "dark" : "light");
-  }, []);
-  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
-};
-
-// 커스텀 훅: useTheme
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error("useTheme must be used within an ThemeProvider");
-  }
-  return context;
-};
 
 // AppContext 타입 정의
 interface AppContextType {
@@ -300,6 +270,7 @@ export const NotificationSystem: React.FC = () => {
 
 // 메인 App 컴포넌트
 const App: React.FC = () => {
+  const {theme} = useTheme();
   const [items, setItems] = useState(generateItems(1000));
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -347,7 +318,7 @@ const App: React.FC = () => {
     addNotification,
     removeNotification,
   };
-  const {theme} = useTheme();
+  
   return (
     <AppContext.Provider value={contextValue}>
       <div
