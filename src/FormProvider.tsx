@@ -1,25 +1,31 @@
-import { createContext, PropsWithChildren, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { useNotification } from "./NotificationProvider";
 
 interface FormData {
-	name: string;
-	email: string;
-	age: number;
-	preferences: string[];
+  name: string;
+  email: string;
+  age: number;
+  preferences: string[];
 }
 
 interface ContextType {
-	formData: FormData;
-	handleSubmit: (e: React.FormEvent) => void;
-	handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	handlePreferenceChange: (preference: string) => void;
+  formData: FormData;
+  handleSubmit: (e: React.FormEvent) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePreferenceChange: (preference: string) => void;
 }
 
 const FormContext = createContext<ContextType | null>(null);
 
 export const FormProvider: React.FC<PropsWithChildren> = ({ children }) => {
-	const { addNotification } = useNotification();
-	const [formData, setFormData] = useState({
+  const { addNotification } = useNotification();
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     age: 0,
@@ -47,13 +53,21 @@ export const FormProvider: React.FC<PropsWithChildren> = ({ children }) => {
         : [...prev.preferences, preference],
     }));
   };
-	
-	const value = useMemo(() => ({ formData, handleSubmit, handleInputChange, handlePreferenceChange }), [formData, handleSubmit, handleInputChange, handlePreferenceChange]);
-	return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
+
+  const value = useMemo(
+    () => ({
+      formData,
+      handleSubmit,
+      handleInputChange,
+      handlePreferenceChange,
+    }),
+    [formData, handleSubmit, handleInputChange, handlePreferenceChange],
+  );
+  return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
 };
 
 export const useForm = () => {
-	const context = useContext(FormContext);
-	if (!context) throw new Error('useForm must be used within a FormProvider');
-	return context;
+  const context = useContext(FormContext);
+  if (!context) throw new Error("useForm must be used within a FormProvider");
+  return context;
 };

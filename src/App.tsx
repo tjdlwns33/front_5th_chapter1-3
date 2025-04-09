@@ -1,13 +1,10 @@
-import React, {
-  useState
-} from "react";
+import React, { useState } from "react";
 import { renderLog } from "./utils";
 import { ThemeProvider, useTheme } from "./ThemeProvider";
 import { UserProvider, useUser } from "./UserProvider";
 import { NotificationProvider, useNotification } from "./NotificationProvider";
 import { Item, ItemProvider, useItem } from "./ItemProvider";
 import { FormProvider, useForm } from "./FormProvider";
-
 
 // Header 컴포넌트
 export const Header: React.FC = () => {
@@ -119,7 +116,8 @@ export const ItemList: React.FC<{
 // ComplexForm 컴포넌트
 export const ComplexForm: React.FC = React.memo(() => {
   renderLog("ComplexForm rendered");
-  const { formData, handleSubmit, handleInputChange, handlePreferenceChange } = useForm();
+  const { formData, handleSubmit, handleInputChange, handlePreferenceChange } =
+    useForm();
 
   return (
     <div className="mt-8">
@@ -206,7 +204,6 @@ export const NotificationSystem: React.FC = () => {
   );
 };
 
-
 // MainContent 컴포넌트
 const MainContent: React.FC = () => {
   const { theme } = useTheme();
@@ -227,19 +224,19 @@ const MainContent: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 // Layout 컴포넌트
 const Layout: React.FC = () => {
   return (
     <>
       <Header />
-      <MainContent/>
+      <MainContent />
       <NotificationSystem />
     </>
-  )
-}
+  );
+};
 
 // 메인 App 컴포넌트
 const App: React.FC = () => {

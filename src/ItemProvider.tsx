@@ -1,4 +1,11 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { generateItems } from "./utils";
 
 export interface Item {
@@ -9,28 +16,28 @@ export interface Item {
 }
 
 interface ContextType {
-	items: Item[];
+  items: Item[];
   addItems: () => void;
 }
 
 const ItemContext = createContext<ContextType | null>(null);
 
 export const ItemProvider: React.FC<PropsWithChildren> = ({ children }) => {
-	const [items, setItems] = useState(generateItems(1000));
-	
-	const addItems = useCallback(() => {
-		setItems((prevItems) => [
-			...prevItems,
-			...generateItems(1000, prevItems.length),
-		]);
-	}, []);
+  const [items, setItems] = useState(generateItems(1000));
 
-	const value = useMemo(() => ({ items, addItems }), [items, addItems]);
-	return <ItemContext.Provider value={value}>{children}</ItemContext.Provider>;
+  const addItems = useCallback(() => {
+    setItems((prevItems) => [
+      ...prevItems,
+      ...generateItems(1000, prevItems.length),
+    ]);
+  }, []);
+
+  const value = useMemo(() => ({ items, addItems }), [items, addItems]);
+  return <ItemContext.Provider value={value}>{children}</ItemContext.Provider>;
 };
 
 export const useItem = () => {
-	const context = useContext(ItemContext);
-	if (!context) throw new Error('useItem must be used within a ItemProvider');
-	return context;
+  const context = useContext(ItemContext);
+  if (!context) throw new Error("useItem must be used within a ItemProvider");
+  return context;
 };
